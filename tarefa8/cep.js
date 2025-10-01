@@ -12,6 +12,14 @@ document.getElementById("cep").addEventListener("blur", (evento) => {
                 document.getElementById('bairro').value = data.bairro;
                 document.getElementById('cidade').value = data.localidade;
                 document.getElementById('estado').value = data.uf;
+
+                localStorage.setItem('endereco', JSON.stringify({
+                    cep: cepInformado,
+                    logradouro: data.logradouro,
+                    bairro: data.bairro,
+                    cidade: data.localidade,
+                    estado: data.uf
+                }));
             }else{
                 alert("CEP não encontrado");
             }
@@ -20,31 +28,4 @@ document.getElementById("cep").addEventListener("blur", (evento) => {
         .catch(error =>console.error( "Erro ao buscar o CEP: ", error));
         
 })
-// Função para salvar os dados no localStorage
-function salvarDadosFormulario() {
-    const campos = ['cep', 'logradouro', 'bairro', 'cidade', 'estado'];
-    campos.forEach(campo => {
-        const valor = document.getElementById(campo).value;
-        localStorage.setItem(campo, valor);
-    });
-}
-
-// Adiciona evento de input para salvar os dados conforme o usuário digita
-document.querySelectorAll('#cep, #logradouro, #bairro, #cidade, #estado')
-    .forEach(elemento => {
-        elemento.addEventListener('input', salvarDadosFormulario);
-    });
-
-// Função para restaurar os dados do localStorage
-function restaurarDadosFormulario() {
-    const campos = ['cep', 'logradouro', 'bairro', 'cidade', 'estado'];
-    campos.forEach(campo => {
-        const valorSalvo = localStorage.getItem(campo);
-        if (valorSalvo) {
-            document.getElementById(campo).value = valorSalvo;
-        }
-    });
-}
-
-// Executa ao carregar a página
-window.addEventListener('DOMContentLoaded', restaurarDadosFormulario);
+const enderecoSalvo = JSON.parse(localStorage.getItem('endereco'));
